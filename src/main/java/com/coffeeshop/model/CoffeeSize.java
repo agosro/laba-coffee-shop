@@ -1,3 +1,5 @@
+package com.coffeeshop.model;
+
 public class CoffeeSize {
     private String size;
     private double priceMultiplier;
@@ -21,5 +23,13 @@ public class CoffeeSize {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return "CoffeeSize{" +
+                "size='" + size + '\'' +
+                ", priceMultiplier=" + priceMultiplier +
+                '}';
     }
 }

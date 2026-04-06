@@ -1,11 +1,16 @@
+package com.coffeeshop.model;
+
 public class Order {
 
+    private static int orderCounter = 0;
+    private final int orderId;
     private Customer customer;
     private OrderItem item;
     private String orderDate;
     private String status;
 
     public Order(Customer customer, String orderDate) {
+        this.orderId = ++orderCounter;
         this.customer = customer;
         this.orderDate = orderDate;
         this.status = "Pending";
@@ -16,6 +21,16 @@ public class Order {
             return item.calculatePrice();
         }
         return 0.0;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", customer=" + customer +
+                ", orderDate='" + orderDate + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 
     public int calculatePrepTime() {
@@ -55,5 +70,13 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public static int getOrderCounter() {
+        return orderCounter;
     }
 }

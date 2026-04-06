@@ -1,3 +1,5 @@
+package com.coffeeshop.model;
+
 public class OrderItem {
 
     private Coffee coffee;
@@ -14,7 +16,7 @@ public class OrderItem {
 
     public double calculatePrice() {
         double basePrice = coffee.getPrice() * size.getPriceMultiplier();
-        double milkCost = (milk != null) ? milk.getExtraCost() : 0.0;
+        double milkCost = (milk != null) ? milk.getPrice() : 0.0;
         double syrupCost = (syrup != null) ? syrup.getPrice() : 0.0;
         return basePrice + milkCost + syrupCost;
     }
@@ -56,5 +58,17 @@ public class OrderItem {
 
     public void setSyrup(Syrup syrup) {
         this.syrup = syrup;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "coffee=" + coffee +
+                ", size=" + size +
+                ", milk=" + milk +
+                ", syrup=" + syrup +
+                ", totalPrice=$" + String.format("%.2f", calculatePrice()) +
+                ", prepTime=" + calculatePrepTime() + " minutes" +
+                '}';
     }
 }
