@@ -22,8 +22,16 @@ public class Main {
         try {
             Coffee espresso = new Coffee("Espresso", 2.50, 2);
             CoffeeSize medium = new CoffeeSize(1.0, "Medium");
+
             Order order = new Order(customer, "2026-03-26");
+            order.setStatus(OrderStatus.NEW);
+            order.setPaymentMethod(PaymentMethod.CASH);
+
+            // Apply a real discount to demonstrate DiscountType in the domain
+            order.setDiscount(Discount.percentage(10)); // 10% off
+
             order.setItem(new OrderItem(espresso, medium, null, null));
+
             coffeeService.processOrder(order);
         } catch (InvalidOrderException e) {
             LOGGER.error("Failed to process order: {}", e.getMessage());
@@ -83,6 +91,11 @@ public class Main {
         sortedCoffees.add("Cappuccino");
         LOGGER.info("Sorted Coffees (TreeSet): {}", sortedCoffees);
 
+        // --- Demo 5: File words counter ---
+        LOGGER.info("--- Running Demo 5: File Words Counter ---");
+        WordCounter.countWordsInFile("input.txt", "output.txt", "coffee");
+
         LOGGER.info("Coffee Shop application finished.");
     }
+
 }

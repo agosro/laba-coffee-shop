@@ -53,3 +53,5 @@ Thumbs.db
 .env
 .env.local
 
+# WordCounter task outputs (generated files)
+output.txt
