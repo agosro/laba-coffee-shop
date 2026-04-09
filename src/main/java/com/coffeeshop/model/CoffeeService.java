@@ -2,7 +2,6 @@ package com.coffeeshop.model;
 
 import com.coffeeshop.exception.InvalidOrderException;
 import com.coffeeshop.exception.InvalidPointsException;
-import com.coffeeshop.exception.OutOfStockException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +30,8 @@ public class CoffeeService implements IOrderProcessor {
         LOGGER.info("Order ID: {}", order.getOrderId());
         LOGGER.info("Order Date: {}", order.getOrderDate());
         LOGGER.info("Customer: {}", order.getCustomer().getName());
+        LOGGER.info("Payment Method: {}", order.getPaymentMethod());
+        LOGGER.info("Discount Type: {}", order.getDiscountType());
         LOGGER.info("--------------------------------");
 
         OrderItem item = order.getItem();
@@ -46,6 +47,16 @@ public class CoffeeService implements IOrderProcessor {
         }
 
         LOGGER.info("--------------------------------");
+        double subtotal = item.calculatePrice();
+        LOGGER.info("Subtotal: {}{}", DEFAULT_CURRENCY, String.format("%.2f", subtotal));
+        LOGGER.info("Discount Type: {}", order.getDiscountType());
+        if (order.getDiscount() != null) {
+            if (order.getDiscount().getType() == DiscountType.PERCENTAGE) {
+                LOGGER.info("Discount: {}%", String.format("%.2f", order.getDiscount().getPercentage()));
+            } else if (order.getDiscount().getType() == DiscountType.FIXED_AMOUNT) {
+                LOGGER.info("Discount: {}{}", DEFAULT_CURRENCY, String.format("%.2f", order.getDiscount().getAmount()));
+            }
+        }
         LOGGER.info("Total: {}{}", DEFAULT_CURRENCY, String.format("%.2f", order.calculateTotal()));
         LOGGER.info("Estimated Prep Time: {} minutes", order.calculatePrepTime());
 
@@ -61,8 +72,6 @@ public class CoffeeService implements IOrderProcessor {
         LOGGER.info("Status: {}", order.getStatus());
         LOGGER.info("================================\n");
     }
-
-    // ...existing code...
 
     public String getServiceName() {
         return serviceName;
