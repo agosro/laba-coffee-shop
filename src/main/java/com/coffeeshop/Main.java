@@ -68,6 +68,15 @@ public class Main {
         OrderHistory<Order> orderHistory = new OrderHistory<>();
         Order sampleOrder = new Order(customer, "2026-03-30");
         orderHistory.addOrder(sampleOrder);
+
+        orderHistory.processAll(o -> LOGGER.info("Processing order ID: {}", o.getOrderId()));
+
+        double totalHistory = orderHistory.calculateTotal(o -> o.calculateTotal());
+        LOGGER.info("Total price in order history: {}{}", "$", String.format("%.2f", totalHistory));
+
+        java.util.List<Order> filteredHistory = orderHistory.filter(o -> o.getCustomer().getName().equals("John Doe"));
+        LOGGER.info("Filtered orders matching customer 'John Doe': {}", filteredHistory.size());
+
         LOGGER.info("Order History List contains {} order(s), first item Date: {}",
                 orderHistory.getHistory().size(),
                 orderHistory.getHistory().get(0).getOrderDate());
@@ -93,7 +102,7 @@ public class Main {
 
         // --- Demo 5: File words counter ---
         LOGGER.info("--- Running Demo 5: File Words Counter ---");
-        WordCounter.countWordsInFile("input.txt", "output.txt", "coffee");
+        WordCounter.countWordsInFile("src/main/resources/input.txt", "src/main/resources/output.txt", "coffee");
 
         LOGGER.info("Coffee Shop application finished.");
     }

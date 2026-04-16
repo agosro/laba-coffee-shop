@@ -1,12 +1,14 @@
 package com.coffeeshop;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 public class WordCounter {
 
@@ -22,13 +24,13 @@ public class WordCounter {
             throw new IllegalArgumentException("Input file does not exist or is not a file: " + inputFile.getAbsolutePath());
         }
 
-        try {
-            String content = FileUtils.readFileToString(inputFile, StandardCharsets.UTF_8);
+        String lowerWord = StringUtils.lowerCase(wordToCount);
 
-            String lowerContent = StringUtils.lowerCase(content);
-            String lowerWord = StringUtils.lowerCase(wordToCount);
-
-            int count = StringUtils.countMatches(lowerContent, lowerWord);
+        try (Stream<String> lines = Files.lines(inputFile.toPath(), StandardCharsets.UTF_8)) {
+            long count = lines
+                    .map(StringUtils::lowerCase)
+                    .mapToInt(line -> StringUtils.countMatches(line, lowerWord))
+                    .sum();
 
             String resultLine = String.format(
                     "%s | file=%s | word='%s' | count=%d%n",
@@ -38,13 +40,14 @@ public class WordCounter {
                     count
             );
 
-            FileUtils.writeStringToFile(outputFile, resultLine, StandardCharsets.UTF_8, true);
+            Files.writeString(outputFile.toPath(), resultLine, StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new RuntimeException("Error processing files: " + e.getMessage(), e);
         }
     }
 
     public static void main(String[] args) {
-        countWordsInFile("input.txt", "output.txt", "coffee");
+        countWordsInFile("src/main/resources/input.txt", "src/main/resources/output.txt", "coffee");
     }
 }
