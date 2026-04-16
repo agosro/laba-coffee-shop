@@ -2,43 +2,18 @@
 
 ## Task requirements
 
-1. **Add 3 enums to the project**
-2. **Count the amount of “special words” inside a file**
-3. **As a result, provide a new file with information**
-4. **Implementation must use**:
-   - `StringUtils` (Apache Commons Lang)
-   - `FileUtils` (Apache Commons IO)
-5. **The output file must NOT clean up previous results** (must append)
-6. **Use any article you want** (input text can be arbitrary)
+1. **Create your own 3 functional interfaces and use lambda functions based on them**
+2. **Replace all iterations in project with collection streaming instead**
 
 ## What was implemented
 
-### 1) Enums added
-Located in `src/main/java/com/coffeeshop/model/`:
+### 1) Functional Interfaces & Lambdas added
+- **Custom Functional Interfaces**: `FilterCondition<T>`, `PriceCalculator<T>`, and `ActionProcessor<T>` were created in the `model` package.
+- **Lambdas**: Lambdas are heavily used in `Main.java` to pass behaviors to our generic collections (e.g., `o -> o.calculateTotal()`).
 
-- `OrderStatus` (`NEW`, `PROCESSING`, `COMPLETED`, `CANCELLED`)
-- `PaymentMethod` (`CASH`, `CREDIT_CARD`, `DEBIT_CARD`, `MOBILE_PAY`)
-- `DiscountType` (`NONE`, `PERCENTAGE`, `FIXED_AMOUNT`)
-
-These enums are now also **used in `com.coffeeshop.Main` (Demo 1)** to demonstrate they work at runtime.
-
-### 2) Word counter (StringUtils + FileUtils)
-Class: `src/main/java/com/coffeeshop/WordCounter.java`
-
-- Reads the whole input file using `FileUtils.readFileToString(...)`
-- Counts occurrences using `StringUtils.countMatches(...)` (case-insensitive)
-- Writes a new result line to the output file using `FileUtils.writeStringToFile(..., append=true)`
-  - This guarantees previous results are preserved
-
-### 3) Input "article"
-File: `input.txt` (project root)
-
-This is a small English sample text that contains multiple occurrences of the word `coffee`.
-
-### 4) Automated test for “append” behavior
-File: `src/test/java/com/coffeeshop/WordCounterTest.java`
-
-The test runs the counter twice and checks that the output file size increases on the second run.
+### 2) Collection Streaming API (Iterations replaced)
+- **Loops eliminated**: All traditional `for` and `while` loops across the project were entirely removed and replaced with Java Streams (`.stream().filter()`, `.mapToDouble()`, `.forEach()`).
+- **File Word counter (Stream API)**: `WordCounter.java` was refactored. Instead of regular loops, it now uses `Files.lines(...)` to iteratively stream the input file. It counts occurrences line-by-line using `.mapToInt()` and `.sum()`.
 
 ## How to run (Windows / cmd.exe)
 

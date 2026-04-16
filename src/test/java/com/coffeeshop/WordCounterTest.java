@@ -10,8 +10,8 @@ class WordCounterTest {
 
     @Test
     void appendsResultsInsteadOfOverwriting() {
-        File input = new File("input.txt");
-        assertTrue(input.exists(), "input.txt must exist in the project root");
+        File input = new File("src/main/resources/input.txt");
+        assertTrue(input.exists(), "input.txt must exist in src/main/resources");
 
         File output = new File("target/test-output.txt");
         if (output.exists()) {
